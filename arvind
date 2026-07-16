@@ -1,0 +1,92 @@
+from datetime import datetime
+import random
+
+print("=" * 60)
+print("           CSC SHOP BILLING SYSTEM")
+print("=" * 60)
+
+bill_no = random.randint(10000, 99999)
+date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+customer = input("Customer Name : ")
+mobile = input("Mobile Number : ")
+
+items = []
+subtotal = 0
+
+while True:
+    print("\nEnter Item Details")
+    item = input("Item Name : ")
+    qty = int(input("Quantity : "))
+    rate = float(input("Rate (₹): "))
+
+    amount = qty * rate
+    subtotal += amount
+
+    items.append([item, qty, rate, amount])
+
+    more = input("Add More Items? (y/n): ")
+    if more.lower() != "y":
+        break
+
+gst_percent = float(input("\nGST (%) : "))
+discount = float(input("Discount (₹): "))
+
+gst = subtotal * gst_percent / 100
+grand_total = subtotal + gst - discount
+
+print("\n")
+print("=" * 60)
+print("               CSC SHOP BILL")
+print("=" * 60)
+
+print("Bill No :", bill_no)
+print("Date    :", date)
+print("Customer:", customer)
+print("Mobile  :", mobile)
+
+print("-" * 60)
+print("{:<20}{:<8}{:<10}{:<10}".format("Item","Qty","Rate","Amount"))
+print("-" * 60)
+
+for i in items:
+    print("{:<20}{:<8}{:<10}{:<10}".format(
+        i[0], i[1], i[2], i[3]
+    ))
+
+print("-" * 60)
+print(f"Subtotal      : ₹ {subtotal:.2f}")
+print(f"GST           : ₹ {gst:.2f}")
+print(f"Discount      : ₹ {discount:.2f}")
+print("-" * 60)
+print(f"Grand Total   : ₹ {grand_total:.2f}")
+print("=" * 60)
+print("Thank You! Visit Again")
+print("=" * 60)
+
+filename = f"Bill_{bill_no}.txt"
+
+with open(filename, "w") as file:
+    file.write("="*60+"\n")
+    file.write("CSC SHOP BILL\n")
+    file.write("="*60+"\n")
+    file.write(f"Bill No : {bill_no}\n")
+    file.write(f"Date : {date}\n")
+    file.write(f"Customer : {customer}\n")
+    file.write(f"Mobile : {mobile}\n\n")
+
+    file.write("{:<20}{:<8}{:<10}{:<10}\n".format(
+        "Item","Qty","Rate","Amount"))
+
+    for i in items:
+        file.write("{:<20}{:<8}{:<10}{:<10}\n".format(
+            i[0], i[1], i[2], i[3]
+        ))
+
+    file.write("\n")
+    file.write(f"Subtotal : ₹ {subtotal:.2f}\n")
+    file.write(f"GST : ₹ {gst:.2f}\n")
+    file.write(f"Discount : ₹ {discount:.2f}\n")
+    file.write(f"Grand Total : ₹ {grand_total:.2f}\n")
+
+print(f"\nBill Saved Successfully : {filename}")
